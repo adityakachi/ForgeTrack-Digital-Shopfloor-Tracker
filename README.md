@@ -56,3 +56,5 @@ Since ForgeTrack is built as an agile, client-side application running close to 
 1. Clone the repository to your workstation:
    ```bash
    git clone [https://github.com/YOUR_USERNAME/ForgeTrack-Digital-Shopfloor-Tracker.git](https://github.com/YOUR_USERNAME/ForgeTrack-Digital-Shopfloor-Tracker.git)
+
+cd ForgeTrack-Digital-Shopfloor-Tracker
