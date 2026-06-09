@@ -47,7 +47,6 @@
     margin-top: 5px;
     border-radius: 6px;
     border: 1px solid #ccc;
-    box-sizing: border-box;
   }
   button {
     margin-top: 15px;
@@ -63,7 +62,7 @@
   button:hover {
     background: #003580;
   }
-  #taskMessage, #attendanceMessage {
+  #message {
     margin-top: 10px;
     font-weight: 600;
     color: green;
@@ -80,6 +79,11 @@
   canvas {
     max-width: 100%;
     margin-top: 20px;
+  }
+  .qr-section img {
+    width: 150px;
+    height: 150px;
+    margin-top: 10px;
   }
   .info-section {
     font-size: 14px;
@@ -101,27 +105,36 @@
 
 <header>
   <img src="https://www.shutterstock.com/image-vector/blacksmith-shop-graphic-label-forge-260nw-2093527090.jpg" alt="Forging Logo">
-  <h1>Aditya’s Forging Shop Digital Tracker</h1>
+  <h1>Aditya’s Forging Shop Digital Tracker </h1>
 </header>
 
+<!-- Task Reporting Form -->
 <form id="taskForm">
   <h2>Task Reporting</h2>
 
   <label for="workerName">Worker Name</label>
-  <select id="workerName" required>
-    <option value="">Select Worker</option>
-    <option value="21PS301">Aditya Kachi</option>
-    <option value="22PS302">Parth Atiwadkar</option>
-    <option value="22PS303">Abhishek Gadakh</option>
-    <option value="22PS304">Tejas Navsupe</option>
-    <option value="22PS305">Umesh Khadke</option>
-    <option value="22PS306">Aditya Kadam</option>
-    <option value="22PS307">Harshada Bhagat</option>
-    <option value="22PS308">Vaishnavi Hande</option>
-  </select>
+<select id="workerName" required>
+  <option value="">Select Worker</option>
+  <option value="21PS301">Aditya Kachi</option>
+  <option value="22PS302">Parth Atiwadkar</option>
+  <option value="22PS303">Abhishek Gadakh</option>
+  <option value="22PS304">Tejas Navsupe</option>
+  <option value="22PS305">Umesh Khadke</option>
+  <option value="22PS306">Aditya Kadam</option>
+  <option value="22PS307">Harshada Bhagat</option>
+  <option value="22PS308">Vaishnavi Hande</option>
+</select>
 
-  <label for="workerId">Worker ID (Auto-filled)</label>
-  <input type="text" id="workerId" readonly required />
+<label for="workerId">Worker ID (Auto-filled)</label>
+<input type="text" id="workerId" readonly required />
+
+<script>
+  document.getElementById('workerName').addEventListener('change', function () {
+    const selectedId = this.value;
+    document.getElementById('workerId').value = selectedId;
+  });
+</script>
+
 
   <label for="taskType">Task Type</label>
   <select id="taskType" required>
@@ -149,6 +162,7 @@
   <div id="taskMessage"></div>
 </form>
 
+<!-- Attendance Reporting Form -->
 <form id="attendanceForm" class="attendance-form">
   <h2>Daily Attendance Report</h2>
   <label for="attendanceWorkerId">Worker ID</label>
@@ -182,6 +196,7 @@
   <button id="exportExcelBtn">📦 Export Data to Excel</button>
 </section>
 
+<!-- Monthly Report Generator -->
 <section class="monthly-report-section">
   <h2>📅 Generate Monthly Report</h2>
   <label for="monthPicker">Select Month</label>
@@ -217,7 +232,6 @@
 <script src="https://cdn.sheetjs.com/xlsx-latest/package/dist/shim.min.js"></script>
 <script src="https://cdn.sheetjs.com/xlsx-latest/package/dist/xlsx.full.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-
 <script>
   const taskForm = document.getElementById('taskForm');
   const attendanceForm = document.getElementById('attendanceForm');
@@ -226,12 +240,6 @@
   const exportBtn = document.getElementById('exportExcelBtn');
   const generateMonthlyReportBtn = document.getElementById('generateMonthlyReportBtn');
   const monthPicker = document.getElementById('monthPicker');
-
-  // Dynamic Worker ID auto-filler logic
-  document.getElementById('workerName').addEventListener('change', function () {
-    const selectedId = this.value;
-    document.getElementById('workerId').value = selectedId;
-  });
 
   function getTasks() {
     return JSON.parse(localStorage.getItem('tasks') || '[]');
@@ -295,6 +303,7 @@
     const attendance = getAttendance();
     const allData = [];
 
+    // Add tasks with a type label for clarity
     tasks.forEach(t => allData.push({
       RecordType: 'Task',
       WorkerID: t.workerId,
@@ -306,6 +315,7 @@
       AttendanceStatus: ''
     }));
 
+    // Add attendance with empty task fields
     attendance.forEach(a => allData.push({
       RecordType: 'Attendance',
       WorkerID: a.workerId,
@@ -322,7 +332,7 @@
       return;
     }
 
-    // Open alternative new window layout
+    // 1. Open new tab with HTML table preview
     let html = '<html><head><title>Forging Shop Combined Report</title></head><body>';
     html += '<h2>📊 Aditya’s Forging Shop - Combined Report View</h2>';
     html += '<table border="1" cellpadding="5" cellspacing="0" style="border-collapse:collapse;">';
@@ -340,13 +350,14 @@
       html += '</tr>';
     });
 
-    html += '</table></body></html>';
+    html += '</table>';
+    html += '</body></html>';
 
     const newWindow = window.open();
     newWindow.document.write(html);
     newWindow.document.close();
 
-    // Trigger explicit spreadsheet download
+    // 2. Trigger XLSX file download
     const worksheet = XLSX.utils.json_to_sheet(allData);
     const workbook = XLSX.utils.book_new();
     XLSX.utils.book_append_sheet(workbook, worksheet, "CombinedReport");
@@ -355,7 +366,7 @@
 
   // Monthly report generation handler
   generateMonthlyReportBtn.addEventListener('click', () => {
-    const selectedMonth = monthPicker.value; 
+    const selectedMonth = monthPicker.value; // format: 'YYYY-MM'
     if (!selectedMonth) {
       alert('Please select a month first.');
       return;
@@ -363,6 +374,8 @@
 
     const tasks = getTasks();
     const attendance = getAttendance();
+
+    // Filter function to check if a date string starts with selectedMonth
     const filterByMonth = (dateStr) => dateStr.startsWith(selectedMonth);
 
     const filteredTasks = tasks.filter(t => t.taskDate && filterByMonth(t.taskDate));
@@ -397,6 +410,7 @@
       return;
     }
 
+    // Open new tab with monthly report preview
     let html = '<html><head><title>Monthly Report</title></head><body>';
     html += `<h2>📅 Monthly Report for ${selectedMonth}</h2>`;
     html += '<table border="1" cellpadding="5" cellspacing="0" style="border-collapse:collapse;">';
@@ -420,13 +434,14 @@
     newWindow.document.write(html);
     newWindow.document.close();
 
+    // Trigger XLSX download for monthly data
     const worksheet = XLSX.utils.json_to_sheet(monthlyData);
     const workbook = XLSX.utils.book_new();
     XLSX.utils.book_append_sheet(workbook, worksheet, "MonthlyReport");
     XLSX.writeFile(workbook, `ForgingShop_Monthly_Report_${selectedMonth}.xlsx`);
   });
 
-  // Chart setup
+  // Productivity chart
   const ctx = document.getElementById('productivityChart').getContext('2d');
   const productivityChart = new Chart(ctx, {
     type: 'bar',
@@ -458,11 +473,13 @@
     productivityChart.data.datasets[0].data = Object.values(dayMap);
     productivityChart.update();
   }
-  
-  // Render chart on initial script run
   updateChart();
+</script>
 
-  // Assistant context advice routine
+</body>
+</html>
+
+<script>
   function launchAI() {
     const output = document.getElementById('aiOutput');
     if (!output) return;
@@ -485,5 +502,3 @@
     output.innerText = `🤖 Hello ${workerId}! Here's a tip for ${task}: ${tip}`;
   }
 </script>
-</body>
-</html>
