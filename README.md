@@ -1,5 +1,7 @@
 # ForgeTrack: Digital Production & Tool Monitoring System for Forging Shops
 
+![ForgeTrack Dashboard Interface](Aditya’s Forging Shop Digital Tracker.png)
+
 An advanced, data-driven manufacturing execution prototype designed to eliminate manual tracking overhead, minimize tool downtime, and bring real-time operational visibility to legacy forging shop floors. Developed and validated through in-plant observations at **Vanaz Engineers Ltd.**
 
 ---
@@ -41,20 +43,10 @@ Traditional forging environments frequently suffer from disconnected workflows, 
 
 ---
 
-## 📊 Business & Operational Impact
+## 📂 Repository Structure
 
-* **Zero-Paper Pipeline:** Eliminates physically vulnerable paper log sheets across the machining and forging sectors.
-* **Predictive Maintenance Baseline:** Replaces reactive maintenance habits with an automated, data-driven alerting workflow, helping reduce unplanned shopfloor downtime.
-* **Frictionless Reporting:** Cuts daily management audit formatting times from hours to a single-click data extraction sequence.
-
----
-
-## 🚀 Installation & Local Deployment
-
-Since ForgeTrack is built as an agile, client-side application running close to edge operations, deployment requires zero database configuration overhead:
-
-1. Clone the repository to your workstation:
-   ```bash
-   git clone [https://github.com/YOUR_USERNAME/ForgeTrack-Digital-Shopfloor-Tracker.git](https://github.com/YOUR_USERNAME/ForgeTrack-Digital-Shopfloor-Tracker.git)
-
-cd ForgeTrack-Digital-Shopfloor-Tracker
+```text
+├── index.html                                    # Core application viewport & responsive interface
+├── README.md                                     # Professional technical documentation
+├── Aditya’s Forging Shop Digital Tracker.png     # Interface preview graphic
+└── Documentation/                                # Academic project background & corporate research reports
