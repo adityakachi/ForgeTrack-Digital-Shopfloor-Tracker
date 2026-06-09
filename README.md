@@ -46,7 +46,7 @@ Traditional forging environments frequently suffer from disconnected workflows, 
 ## 📂 Repository Structure
 
 ```text
-├── main.html                                    # Core application viewport & responsive interface
+├── index.html                                    # Core application viewport & responsive interface
 ├── README.md                                     # Professional technical documentation
 ├── Aditya’s Forging Shop Digital Tracker.png     # Interface preview graphic
 └── Documentation/                                # Academic project background & corporate research reports
