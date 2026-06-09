@@ -45,8 +45,6 @@ Traditional forging environments frequently suffer from disconnected workflows, 
 
 ---
 
-README.md with technical project architecture
-## 📂 Repository Structure
 
 ```text
 ├── index.html                                    # Core application viewport & responsive interface
